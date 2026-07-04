@@ -5,6 +5,7 @@ import * as SourceClient from '../api/sourceClient.js';
 import * as CryptoUtil from '../utils/cryptoUtil.js';
 import * as Settings from '../settings.js';
 
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import { AddCoinSourceBoxLayout } from './addCoinSourceBoxLayout.js';
 
@@ -35,7 +36,7 @@ export let AddCoinMenuItem = GObject.registerClass(
 
       let coinSymbol = new St.Entry({
         name: 'symbol',
-        hint_text: 'Symbol/Vol     ',
+        hint_text: 'e.g., BTC/USDT',
         can_focus: true,
         x_expand: true,
         style_class: 'crypto-input',
@@ -44,7 +45,7 @@ export let AddCoinMenuItem = GObject.registerClass(
 
       let coinTitle = new St.Entry({
         name: 'title',
-        hint_text: 'Label?',
+        hint_text: 'Label (optional)',
         can_focus: true,
         x_expand: true,
         style_class: 'crypto-input',
@@ -67,8 +68,10 @@ export let AddCoinMenuItem = GObject.registerClass(
     }
 
     async _addCoin(coinSymbol, coinTitle) {
-      // TODO show error
-      if (coinSymbol.text === '' || !coinSymbol.text.includes('/')) return;
+      if (coinSymbol.text === '' || !coinSymbol.text.includes('/')) {
+        Main.notifyError('Crypto Tracker', 'Please enter a valid pair with a slash (e.g., BTC/USDT)');
+        return;
+      }
 
       let coingecko_id = '';
       if (this.current_exchange === SourceClient.exchanges.coingecko) {

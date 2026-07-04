@@ -108,12 +108,12 @@ export default class CryptoTrackerPreferences extends ExtensionPreferences {
     // Panel Display Mode
     const displayModeRow = new Adw.ComboRow({
       title: 'Top Panel Display Mode',
-      subtitle: 'Static shows all coins, Ticker rotates through them',
-      model: Gtk.StringList.new(['Static', 'Ticker']),
+      subtitle: 'Static, Ticker (rotates coins), or Marquee (scrolls text)',
+      model: Gtk.StringList.new(['Static', 'Ticker', 'Marquee']),
     });
     group.add(displayModeRow);
 
-    const displayModes = ['static', 'ticker'];
+    const displayModes = ['static', 'ticker', 'marquee'];
     let currentMode = settings.get_string('panel-display-mode');
     displayModeRow.selected = Math.max(0, displayModes.indexOf(currentMode));
 

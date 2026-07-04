@@ -119,11 +119,17 @@ const Indicator = GObject.registerClass(
     _startTicker() {
       this._stopTicker();
       this.tickerIndex = 0;
+      this.marqueeOffset = 0;
       let displayMode = Settings.get_panel_display_mode();
       if (displayMode === 'ticker') {
         let interval = Settings.get_ticker_interval() || 5;
         this.tickerTimeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, interval, () => {
           this._advanceTicker();
+          return true;
+        });
+      } else if (displayMode === 'marquee') {
+        this.tickerTimeout = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 200, () => {
+          this._advanceMarquee();
           return true;
         });
       }
@@ -141,6 +147,14 @@ const Indicator = GObject.registerClass(
       let activeCoins = this.coins.filter(({ activeCoin }) => activeCoin);
       if (activeCoins.length > 0) {
         this.tickerIndex = (this.tickerIndex + 1) % activeCoins.length;
+      }
+      this._updateTopPanelText();
+    }
+
+    _advanceMarquee() {
+      let activeCoins = this.coins.filter(({ activeCoin }) => activeCoin);
+      if (activeCoins.length > 0) {
+        this.marqueeOffset++;
       }
       this._updateTopPanelText();
     }
@@ -164,6 +178,24 @@ const Indicator = GObject.registerClass(
           changeStr = ` (<span foreground="${color}">${sign}${coin.current_change.toFixed(1)}%</span>)`;
         }
         this.menuItem.clutter_text.set_markup(`${coin.title || coin.symbol} ${coin.current_price || '...'}${changeStr}`);
+      } else if (displayMode === 'marquee') {
+        let text = activeCoins
+          .map((coin) => {
+             let changeStr = '';
+             if (coin.current_change) {
+               let sign = coin.current_change > 0 ? '+' : '';
+               let indicator = coin.current_change > 0 ? '↗' : (coin.current_change < 0 ? '↘' : '');
+               changeStr = ` (${indicator} ${sign}${coin.current_change.toFixed(1)}%)`;
+             }
+             return `${coin.title || coin.symbol} ${coin.current_price || '...'}${changeStr}`;
+          })
+          .join('   •   ') + '   •   ';
+        
+        let maxLen = 30; // Max characters shown on panel
+        this.marqueeOffset = (this.marqueeOffset || 0) % text.length;
+        let display = text.slice(this.marqueeOffset) + text.slice(0, this.marqueeOffset);
+        let escapedDisplay = GLib.markup_escape_text(display.slice(0, maxLen), -1);
+        this.menuItem.clutter_text.set_markup(`<span font_family="monospace">${escapedDisplay}</span>`);
       } else {
         let markupText = activeCoins
           .map((coin) => {

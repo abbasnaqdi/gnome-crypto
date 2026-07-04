@@ -82,6 +82,17 @@ export let CoinMenuItem = GObject.registerClass(
       this._statusBtn.connect('clicked', this._toggle.bind(this, menuItem));
       this.add_child(this._statusBtn);
 
+      let editIcon = new St.Icon({
+        icon_name: 'document-edit-symbolic',
+        style_class: 'popup-menu-icon',
+      });
+      let editBtn = new St.Button({
+        child: editIcon,
+        style_class: 'btn m0',
+      });
+      editBtn.connect('clicked', this._editCoin.bind(this));
+      this.add_child(editBtn);
+
       let icon = new St.Icon({
         icon_name: 'edit-delete-symbolic',
         style_class: 'popup-menu-icon',
@@ -249,6 +260,20 @@ export let CoinMenuItem = GObject.registerClass(
     _delCoin(menuItem) {
       Settings.delCoin({ id: this.id });
       this.panelMenu._buildCoinsSection();
+    }
+
+    _editCoin() {
+      if (this.panelMenu && this.panelMenu.addCoinSubMenu) {
+        let addCoinMenu = this.panelMenu.addCoinSubMenu;
+        addCoinMenu.editing_id = this.id;
+        addCoinMenu.coinSymbol.text = this.symbol;
+        addCoinMenu.coinTitle.text = this.title || '';
+        
+        // Open the parent SubMenuMenuItem if possible
+        if (addCoinMenu._parent && addCoinMenu._parent.setOpenState) {
+          addCoinMenu._parent.setOpenState(true);
+        }
+      }
     }
 
     _moveUp(menuItem) {

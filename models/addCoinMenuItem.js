@@ -34,23 +34,23 @@ export let AddCoinMenuItem = GObject.registerClass(
       let hbox = new St.BoxLayout({ x_expand: true });
       vbox.add_child(hbox);
 
-      let coinSymbol = new St.Entry({
+      this.coinSymbol = new St.Entry({
         name: 'symbol',
         hint_text: 'e.g., BTC/USDT',
         can_focus: true,
         x_expand: true,
         style_class: 'crypto-input',
       });
-      hbox.add_child(coinSymbol);
+      hbox.add_child(this.coinSymbol);
 
-      let coinTitle = new St.Entry({
+      this.coinTitle = new St.Entry({
         name: 'title',
         hint_text: 'Label (optional)',
         can_focus: true,
         x_expand: true,
         style_class: 'crypto-input',
       });
-      hbox.add_child(coinTitle);
+      hbox.add_child(this.coinTitle);
 
       let saveIcon = new St.Icon({
         icon_name: 'media-floppy-symbolic',
@@ -62,13 +62,16 @@ export let AddCoinMenuItem = GObject.registerClass(
       });
       addBtn.connect(
         'clicked',
-        this._addCoin.bind(this, coinSymbol, coinTitle)
+        this._addCoin.bind(this)
       );
       hbox.add_child(addBtn);
     }
 
-    async _addCoin(coinSymbol, coinTitle) {
-      if (coinSymbol.text === '' || !coinSymbol.text.includes('/')) {
+    async _addCoin() {
+      let symbolText = this.coinSymbol.text;
+      let titleText = this.coinTitle.text;
+
+      if (symbolText === '' || !symbolText.includes('/')) {
         Main.notifyError('Crypto Tracker', 'Please enter a valid pair with a slash (e.g., BTC/USDT)');
         return;
       }
@@ -77,7 +80,7 @@ export let AddCoinMenuItem = GObject.registerClass(
       if (this.current_exchange === SourceClient.exchanges.coingecko) {
         try {
           coingecko_id = await CryptoUtil.coingecko_symbol_to_id(
-            coinSymbol.text.split('/')[0],
+            symbolText.split('/')[0],
             this.Me
           );
         } catch (error) {
@@ -86,24 +89,31 @@ export let AddCoinMenuItem = GObject.registerClass(
       }
 
       let coin = {
-        id: `${CryptoUtil.createUUID()}`,
-        symbol: `${coinSymbol.text}`,
+        id: this.editing_id || `${CryptoUtil.createUUID()}`,
+        symbol: `${symbolText}`,
         active: false,
-        title: `${coinTitle.text}`,
+        title: `${titleText}`,
         exchange: `${this.current_exchange}`,
         coingecko_id,
       };
 
       try {
-        let result = Settings.addCoin(coin);
+        let result = false;
+        if (this.editing_id) {
+          Settings.updateCoin(coin);
+          result = true;
+          this.editing_id = null; // reset after edit
+        } else {
+          result = Settings.addCoin(coin);
+        }
 
         if (result) this.panelMenu._buildCoinsSection();
       } catch (error) {
         console.log(error);
       }
 
-      coinTitle.text = '';
-      coinSymbol.text = '';
+      this.coinTitle.text = '';
+      this.coinSymbol.text = '';
     }
   }
 );

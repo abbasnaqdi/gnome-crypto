@@ -45,6 +45,7 @@ const Indicator = GObject.registerClass(
         y_align: Clutter.ActorAlign.CENTER,
         style_class: 'menu-item-text',
       });
+      this.menuItem.clutter_text.use_markup = true;
       this.add_child(this.menuItem);
 
       this.coinSection = new PopupMenu.PopupMenuSection();
@@ -81,8 +82,8 @@ const Indicator = GObject.registerClass(
       addCoinBtnMenu.add_style_class_name('add-coin-btn');
       this.menu.addMenuItem(addCoinBtnMenu);
 
-      let addCoinSubMenu = new AddCoinMenuItem(this, Me);
-      addCoinBtnMenu.menu.addMenuItem(addCoinSubMenu);
+      this.addCoinSubMenu = new AddCoinMenuItem(this, Me);
+      addCoinBtnMenu.menu.addMenuItem(this.addCoinSubMenu);
     }
 
     _buildCoinsSection() {
@@ -152,16 +153,27 @@ const Indicator = GObject.registerClass(
       if (displayMode === 'ticker') {
         this.tickerIndex = (this.tickerIndex || 0) % activeCoins.length;
         let coin = activeCoins[this.tickerIndex];
-        let changeStr = coin.current_change ? ` (${coin.current_change > 0 ? '+' : ''}${coin.current_change.toFixed(1)}%)` : '';
-        this.menuItem.text = `${coin.title || coin.symbol} ${coin.current_price || '...'}${changeStr}`;
+        let changeStr = '';
+        if (coin.current_change) {
+          let color = coin.current_change > 0 ? '#2ec27e' : (coin.current_change < 0 ? '#e01b24' : '');
+          let sign = coin.current_change > 0 ? '+' : '';
+          changeStr = ` (<span foreground="${color}">${sign}${coin.current_change.toFixed(1)}%</span>)`;
+        }
+        this.menuItem.clutter_text.set_markup(`${coin.title || coin.symbol} ${coin.current_price || '...'}${changeStr}`);
         this.tickerIndex++;
       } else {
-        this.menuItem.text = activeCoins
+        let markupText = activeCoins
           .map((coin) => {
-             let changeStr = coin.current_change ? ` (${coin.current_change > 0 ? '+' : ''}${coin.current_change.toFixed(1)}%)` : '';
+             let changeStr = '';
+             if (coin.current_change) {
+               let color = coin.current_change > 0 ? '#2ec27e' : (coin.current_change < 0 ? '#e01b24' : '');
+               let sign = coin.current_change > 0 ? '+' : '';
+               changeStr = ` (<span foreground="${color}">${sign}${coin.current_change.toFixed(1)}%</span>)`;
+             }
              return `${coin.title || coin.symbol} ${coin.current_price || '...'}${changeStr}`;
           })
           .join(' | ');
+        this.menuItem.clutter_text.set_markup(markupText);
       }
     }
 

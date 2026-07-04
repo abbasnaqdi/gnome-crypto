@@ -48,8 +48,8 @@ export let getPrice = async function (name, vol, exchange) {
       break;
   }
 
-  if (!result || typeof result !== 'object') {
-    return { price: result || 'Error', change: 0 };
+  if (!result || typeof result !== 'object' || result.price === 'Error' || isNaN(Number(result.price))) {
+    return { price: '...', change: 0 };
   }
 
   let { maximumFractionDigits, minimumFractionDigits } = _fractionDigits(result.price);

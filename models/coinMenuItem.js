@@ -23,7 +23,7 @@ export let CoinMenuItem = GObject.registerClass(
       this.id = coin.id;
       this.symbol = coin.symbol;
       this.coingecko_id = coin.coingecko_id;
-      this.activeCoin = coin.active;
+      this.activeCoin = Boolean(coin.active);
       this.title = coin.title;
       this.exchange = coin.exchange;
       this.coins = coins;
@@ -158,9 +158,10 @@ export let CoinMenuItem = GObject.registerClass(
       return {
         id: this.id,
         symbol: this.symbol,
-        active: this.activeCoin,
+        active: Boolean(this.activeCoin),
         title: this.title,
         exchange: this.exchange,
+        coingecko_id: this.coingecko_id,
       };
     }
     _getPrice() {

@@ -37,7 +37,6 @@
       <choices>
         <choice value="static" />
         <choice value="ticker" />
-        <choice value="marquee" />
       </choices>
     </key>
     <key type="i" name="ticker-interval">

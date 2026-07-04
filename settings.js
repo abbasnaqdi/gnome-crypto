@@ -86,10 +86,11 @@ export let updateCoin = function (coin) {
 
   for (const _coin of coins) {
     if (_coin.id === coin.id) {
-      _coin.active = coin.active;
+      _coin.active = Boolean(coin.active);
       _coin.title = coin.title;
       _coin.symbol = coin.symbol;
       _coin.exchange = coin.exchange;
+      if (coin.coingecko_id !== undefined) _coin.coingecko_id = coin.coingecko_id;
     }
   }
 

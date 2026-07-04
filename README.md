@@ -18,7 +18,7 @@ A powerful, minimalist, and highly customizable extension for GNOME Shell to tra
 
 * **24h Profit & Loss (P/L) Tracking**: Instantly see your coin's 24h performance with dynamic minimalist colors (`crypto-up` / `crypto-down`).
 * **Expanded Exchange Support**: Now natively tracks **Nobitex** and **Crypto.com** alongside Binance, OKX, and CoinGecko.
-* **Static, Ticker & Marquee Modes**: Configurable display modes to smoothly rotate through tracked coins or scroll them like a stock market marquee across your top panel.
+* **Top Panel Ticker Rotation**: Configurable display mode to smoothly rotate through tracked coins on the top panel instead of crowding the screen.
 * **Minimalist UI Redesign**: Translucent overlays and compact margins allow the extension to flawlessly integrate with any third-party GNOME shell theme (Dark or Light mode).
 * **Memory & CPU Optimized**: Uses batched GNOME Shell timer polling to drastically reduce CPU wakeups and battery drain.
 * **Modern GNOME Compatibility**: Rebuilt preferences engine using `Adw.ActionRow` to natively support GTK4 and GNOME 45-47+.
@@ -60,7 +60,7 @@ cd crypto-bar
     Example: `BTC/USD`
 
 ## Display & Manage Coins
-Activate multiple coins from the menu by toggling the switch next to them. Depending on your Settings, they will display continuously in the top bar, rotate smoothly using Ticker Mode, or scroll infinitely via Marquee Mode, alongside their current 24-hour P/L percentage.
+Activate multiple coins from the menu by toggling the switch next to them. Depending on your Settings, they will display continuously in the top bar or rotate smoothly using Ticker Mode, alongside their current 24-hour P/L percentage.
 
 To **Edit** an existing coin, simply click the pencil (Edit) icon next to it. Its details will automatically populate into the form section where you can adjust the symbol or title and save the changes instantly.
 

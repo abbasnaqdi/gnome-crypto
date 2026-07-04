@@ -1,98 +1,65 @@
 # Crypto Price Tracker for Gnome-Shell
 
 <p align="center">
- <a href="https://github.com/alipirpiran/Crypto-Price-Tracker-for-Gnome-Shell/blob/master/LICENSE">
+ <a href="https://github.com/abbasnaqdi/gnome-crypto/blob/main/LICENSE">
   <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg">
  </a>
- <a href="https://github.com/alipirpiran/Crypto-Price-Tracker-for-Gnome-Shell">
+ <a href="https://github.com/abbasnaqdi/gnome-crypto">
   <img src="https://badges.frapsoft.com/os/v2/open-source.png?v=103">
  </a>
- <a href="https://t.me/mralpr">
-  <img src="https://img.shields.io/badge/Chat%20on-telegram-blue" alt="Telegram">
-  </a>
  </p>
  <br />
  
-An extension for Gnome-Shell to track price of Crypto currencies.
-<br />
-<br />
-<p align="center">
- <img src="https://github.com/alipirpiran/Crypto-Price-Tracker-for-Gnome-Shell/raw/screenshots/36.png" alt="Screenshot">
- </p>
- 
- <br />
- 
-* Refresh price every 10 sec
-* Add new pair e.g BTC/USDT
-* Sources: Binance, OKX, Coingecko
-* [Display multiple coins](#display-multiple-coins)
+A powerful, modern, and highly customized extension for Gnome-Shell to track prices of Crypto currencies directly on your top panel.
 
-## Installation
+> **Note:** This project is a hard fork and massive continuation of the original excellent work by [Ali Pirpiran](https://github.com/alipirpiran/Crypto-Price-Tracker-for-Gnome-Shell). This version features a new minimalist UI, GNOME 45+ compatibility, 24h Profit/Loss tracking, memory optimizations, and expanded exchange support.
 
-### Through extensions.gnome.org (Local installation)
+## ✨ New Features & Upgrades
 
-Go on the [CryptoPriceTracker](https://extensions.gnome.org/extension/2817/crypto-price-tracker/) extension page on extensions.gnome.org, click on the switch ("OFF" => "ON"), click on the install button. That's it !
+* **24h Profit & Loss (P/L) Tracking**: Instantly see your coin's 24h performance with dynamic minimalist colors (`crypto-up` / `crypto-down`).
+* **Expanded Exchange Support**: Now natively tracks **Nobitex** and **Crypto.com** alongside Binance, OKX, and CoinGecko.
+* **Minimalist UI Redesign**: Translucent overlays and compact margins allow the extension to flawlessly integrate with any third-party GNOME shell theme (Dark or Light mode).
+* **Memory & CPU Optimized**: Uses batched GNOME Shell timer polling to drastically reduce CPU wakeups and battery drain.
+* **Modern GNOME Compatibility**: Rebuilt preferences engine using `Adw.ActionRow` to natively support GTK4 and GNOME 45-47+.
 
-### With source code
+## ⚙️ Installation
 
-Clone the git repo:
+### Quick Automatic Install (Recommended)
 
-``` shell
-$ git clone https://github.com/alipirpiran/Crypto-Price-Tracker-for-Gnome-Shell.git
+1. Clone the repository anywhere on your system:
+```bash
+git clone https://github.com/abbasnaqdi/gnome-crypto.git
+cd gnome-crypto
 ```
 
-Create extension dir and Copy files in it:
-
-``` shell
-$ mkdir -p ~/.local/share/gnome-shell/extensions/crypto@abbasnaqdi.com/ 
-$ cd ~/Desktop
-$ cp -r ./Crypto-Price-Tracker-for-Gnome-Shell/* ~/.local/share/gnome-shell/extensions/crypto@abbasnaqdi.com/
+2. Run the automated installation script:
+```bash
+./.install.sh
 ```
 
-* Restart Gnome-shell. (ALT+F2, r, Enter)
+3. **Restart your GNOME Shell** (Press `ALT+F2`, type `r`, and press `Enter`). On Wayland, you may need to log out and log back in.
+4. Enable the extension via **GNOME Extensions** or **GNOME Tweaks**.
 
-* You may need to enable the extension via Gnome Tweaks
-
-## Display multiple coins
-
-Activate multiple coins from the menu and display them all in the top bar.  
-  
-<img src="https://github.com/alipirpiran/Crypto-Price-Tracker-for-Gnome-Shell/raw/screenshots/multicoin.gif">
-
-Thanks to [azorpax](https://github.com/azorpax) for creating this feature. [Pull request](https://github.com/alipirpiran/Crypto-Price-Tracker-for-Gnome-Shell/pull/10#issue-1351086191)
-
-## Sources
+## 📊 Supported Sources
 
 * ### Binance
+    Example: `BTC/USDT`
 
-    List of pairs: <https://www.binance.com/indexSpa.html>
-
-    Example: BTC/USDT
+* ### Nobitex (New!)
+    Ideal for Iranian users tracking local pairs.
+    Example: `BTC/IRT` or `BTC/USDT`
 
 * ### OKX
+    Example: `BTC/USDT`
 
-    List of pairs: <https://www.okx.com/markets/spot-list>
-
-    Example: BTC/USDT
+* ### Crypto.com (New!)
+    Example: `BTC/USDT`
 
 * ### Coingecko
+    Example: `BTC/USD`
 
-    List of coin ids (name): <https://api.coingecko.com/api/v3/coins/list>
+## 🖥️ Display Multiple Coins
+Activate multiple coins from the menu by toggling the switch next to them. They will all display continuously in the top bar alongside their current 24-hour P/L percentage!
 
-    List of compare currencies (vol): <https://api.coingecko.com/api/v3/simple/supported_vs_currencies>
-
-    Example: BTC/USD
-
-## Example List of coins
-
-| Name/Vol |
-| ------ |
-BTC/USDT
-BTC/EUR
-ETH/LTC
-XRP/USDT
-BNB/BTC
-
-## License
-
-[MIT](https://github.com/alipirpiran/Crypto-Price-Tracker-for-Gnome-Shell/blob/master/LICENSE)
+## 📜 License
+[MIT](https://github.com/abbasnaqdi/gnome-crypto/blob/main/LICENSE)

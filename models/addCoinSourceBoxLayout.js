@@ -49,8 +49,6 @@ export let AddCoinSourceBoxLayout = GObject.registerClass(
       hbox.add_child(changeSourceBtn);
 
       this.isActiveChangeSource = true;
-      this.add_child(this._scrollView);
-      // Remove the connect clicked event for collapsing
 
       this.sourceSection = new St.BoxLayout({
         vertical: true,
@@ -64,6 +62,7 @@ export let AddCoinSourceBoxLayout = GObject.registerClass(
       });
       this._scrollView.set_policy(St.PolicyType.NEVER, St.PolicyType.AUTOMATIC);
       this._scrollView.add_child(this.sourceSection);
+      this.add_child(this._scrollView);
       this._buildSourceButtons();
     }
 

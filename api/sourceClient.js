@@ -4,14 +4,16 @@ import { BinanceClient } from './sources/binance.js';
 import { CoingeckoClient } from './sources/coingecko.js';
 import { CryptoClient } from './sources/crypto.js';
 import { OkxClient } from './sources/okx.js';
+import { NobitexClient } from './sources/nobitex.js';
 
 export let current_exchange = '';
 
-export var exchanges = {
+export const exchanges = {
   binance: 'Binance',
   coingecko: 'Coingecko',
   crypto: 'Crypto',
   okx: 'OKX',
+  nobitex: 'Nobitex'
 };
 
 export var change_exchange = (exchange_name) => {
@@ -40,6 +42,9 @@ export let getPrice = async function (name, vol, exchange) {
       break;
     case exchanges.okx:
       result = await OkxClient._getPrice(name, vol);
+      break;
+    case exchanges.nobitex:
+      result = await NobitexClient._getPrice(name, vol);
       break;
   }
 
@@ -70,6 +75,9 @@ export let getChartUrl = (symbol, exchange) => {
 
     case exchanges.okx:
       return OkxClient._getChartUrl(symbol);
+
+    case exchanges.nobitex:
+      return NobitexClient._getChartUrl(symbol);
 
     default:
       return null;

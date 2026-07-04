@@ -130,10 +130,12 @@ export let CoinMenuItem = GObject.registerClass(
       this._startTimer(menuItem);
 
       this.connect('enter-event', () => {
+        if (this._isDestroyed) return;
         viewIcon.icon_name = 'external-link-symbolic';
         viewIcon.style_class = `popup-menu-icon w18`;
       });
       this.connect('leave-event', () => {
+        if (this._isDestroyed) return;
         viewIcon.icon_name = '';
         viewIcon.style_class = `popup-menu-icon exchange-icon ${this.exchange.toLowerCase()}`;
       });
@@ -266,6 +268,7 @@ export let CoinMenuItem = GObject.registerClass(
       if (this.panelMenu && this.panelMenu.addCoinSubMenu) {
         let addCoinMenu = this.panelMenu.addCoinSubMenu;
         addCoinMenu.editing_id = this.id;
+        addCoinMenu.editing_active = this.activeCoin;
         addCoinMenu.coinSymbol.text = this.symbol;
         addCoinMenu.coinTitle.text = this.title || '';
         if (addCoinMenu.saveIcon) {

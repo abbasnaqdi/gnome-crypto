@@ -39,14 +39,7 @@ export let AddCoinSourceBoxLayout = GObject.registerClass(
         x_expand: false,
       });
 
-      this._scrollView = new St.ScrollView({
-        style_class: 'sources-scrollview',
-        enable_mouse_scrolling: true,
-        height: 80,
-      });
-      this._scrollView.set_policy(St.PolicyType.NEVER, St.PolicyType.AUTOMATIC);
-      this._scrollView.add_child(this.sourceSection);
-      this.add_child(this._scrollView);
+      this.add_child(this.sourceSection);
       this._buildSourceButtons();
     }
 
@@ -54,7 +47,7 @@ export let AddCoinSourceBoxLayout = GObject.registerClass(
       let sourceBtnsHbox;
       let btns = [];
       for (let [ind, val] of Object.values(SourceClient.exchanges).entries()) {
-        if (ind % 2 === 0) {
+        if (ind % 3 === 0) {
           sourceBtnsHbox = new St.BoxLayout({
             x_expand: true,
           });
@@ -80,6 +73,7 @@ export let AddCoinSourceBoxLayout = GObject.registerClass(
           child: exchangeBtnHbox,
           style_class: 'btn exchange-btn',
           y_align: Clutter.ActorAlign.CENTER,
+          x_expand: true,
         });
 
         if (val === SourceClient.get_exchange()) {

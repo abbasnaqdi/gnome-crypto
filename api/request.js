@@ -18,6 +18,7 @@ function get_soup_v3(url) {
     if (!_sessionV3) {
       _sessionV3 = new Soup.Session();
       _sessionV3.timeout = 10;
+      _sessionV3.user_agent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/112.0';
     }
 
     let message = Soup.Message.new('GET', url);
@@ -63,6 +64,7 @@ function get_soup_v2(url) {
         new Soup.ProxyResolverDefault()
       );
       _sessionV2.timeout = 10;
+      _sessionV2.user_agent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/112.0';
     }
 
     let message = Soup.Message.new('GET', url);

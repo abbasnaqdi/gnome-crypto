@@ -91,7 +91,7 @@ export let AddCoinMenuItem = GObject.registerClass(
       let coin = {
         id: this.editing_id || `${CryptoUtil.createUUID()}`,
         symbol: `${symbolText}`,
-        active: false,
+        active: this.editing_id ? (this.editing_active || false) : false,
         title: `${titleText}`,
         exchange: `${this.current_exchange}`,
         coingecko_id,

@@ -13,6 +13,8 @@ export let NobitexClient = {
 
       if (jsonRes.status !== 'ok') return { price: 'Error', change: 0 };
 
+      if (!jsonRes.stats) return { price: 'Error', change: 0 };
+
       // Nobitex returns e.g. "btc-rls" or "btc-usdt"
       const key = `${name}-${mappedVol}`.toLowerCase();
       let stats = jsonRes.stats[key];

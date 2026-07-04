@@ -134,7 +134,7 @@ const Indicator = GObject.registerClass(
       if (displayMode === 'ticker') {
         let interval = Settings.get_ticker_interval() || 5;
         this.tickerTimeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, interval, () => {
-          this._updateTopPanelText();
+          this._advanceTicker();
           return true;
         });
       }
@@ -146,6 +146,14 @@ const Indicator = GObject.registerClass(
         GLib.source_remove(this.tickerTimeout);
         this.tickerTimeout = 0;
       }
+    }
+
+    _advanceTicker() {
+      let activeCoins = this.coins.filter(({ activeCoin }) => activeCoin);
+      if (activeCoins.length > 0) {
+        this.tickerIndex = (this.tickerIndex + 1) % activeCoins.length;
+      }
+      this._updateTopPanelText();
     }
 
     _updateTopPanelText() {
@@ -167,7 +175,6 @@ const Indicator = GObject.registerClass(
           changeStr = ` (<span foreground="${color}">${sign}${coin.current_change.toFixed(1)}%</span>)`;
         }
         this.menuItem.clutter_text.set_markup(`${coin.title || coin.symbol} ${coin.current_price || '...'}${changeStr}`);
-        this.tickerIndex++;
       } else {
         let markupText = activeCoins
           .map((coin) => {

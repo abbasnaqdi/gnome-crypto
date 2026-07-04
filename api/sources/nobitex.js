@@ -47,8 +47,9 @@ export let NobitexClient = {
 
   _getChartUrl(symbol) {
     let exchangeUrl = 'https://nobitex.ir/trade';
-    let formattedPair = symbol.replace('/', '-').toLowerCase();
+    // Replace / with - and replace irt with rls because Nobitex uses rls for trade charts
+    let formattedPair = symbol.toLowerCase().replace('/', '-').replace('irt', 'rls');
 
-    return _('%s/%s').format(exchangeUrl, formattedPair);
+    return `${exchangeUrl}/${formattedPair}`;
   }
 }

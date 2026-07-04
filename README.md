@@ -59,8 +59,10 @@ cd gnome-crypto
 * ### Coingecko
     Example: `BTC/USD`
 
-## Display Multiple Coins
+## Display & Manage Coins
 Activate multiple coins from the menu by toggling the switch next to them. Depending on your Settings, they will display continuously in the top bar or rotate smoothly using Ticker Mode, alongside their current 24-hour P/L percentage.
+
+To **Edit** an existing coin, simply click the pencil (Edit) icon next to it. Its details will automatically populate into the "Add / Edit Pair" section where you can adjust the symbol or title and save the changes instantly.
 
 ## License
 [MIT](https://github.com/abbasnaqdi/gnome-crypto/blob/main/LICENSE)

@@ -156,3 +156,30 @@ export let moveCoinDown = function (coin) {
     settings.set_string('coins', JSON.stringify(coinJson));
   }
 };
+
+export let get_panel_position = () => {
+  const settings = _getSettings();
+  try {
+    return settings.get_string('panel-position');
+  } catch (e) {
+    return 'right';
+  }
+};
+
+export let get_panel_box_index = () => {
+  const settings = _getSettings();
+  try {
+    return settings.get_int('panel-box-index');
+  } catch (e) {
+    return 0;
+  }
+};
+
+export let get_font_size = () => {
+  const settings = _getSettings();
+  try {
+    return settings.get_int('font-size');
+  } catch (e) {
+    return 0;
+  }
+};

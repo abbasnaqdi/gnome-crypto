@@ -132,16 +132,51 @@ export default class Extension extends Ex {
       'org.gnome.shell.extensions.crypto-tracker',
     );
 
-    Main.panel.addToStatusArea(this.uuid, this._indicator);
+    let pos = Settings.get_panel_position();
+    let index = Settings.get_panel_box_index();
+    Main.panel.addToStatusArea(this.uuid, this._indicator, index, pos);
+    this._applyFontSize();
+
+    this._settingsId = this._settings.connect('changed', (settings, key) => {
+      if (key === 'panel-position' || key === 'panel-box-index') {
+        this._indicator.destroy();
+        this._indicator = new Indicator(this.metadata);
+        this._indicator._buildCoinsSection();
+        this._indicator._buildAddCoinSection(this);
+        let pos = Settings.get_panel_position();
+        let index = Settings.get_panel_box_index();
+        Main.panel.addToStatusArea(this.uuid, this._indicator, index, pos);
+        this._applyFontSize();
+      }
+      if (key === 'font-size') {
+        this._applyFontSize();
+      }
+      if (key === 'update-interval') {
+        this._indicator._buildCoinsSection();
+      }
+    });
+  }
+
+  _applyFontSize() {
+    let fontSize = Settings.get_font_size();
+    if (fontSize > 0) {
+      this._indicator.menuItem.style = `font-size: ${fontSize}px;`;
+    } else {
+      this._indicator.menuItem.style = null;
+    }
   }
 
   disable() {
-    if (this._indicator.coins?.length) {
+    if (this._settingsId) {
+      this._settings.disconnect(this._settingsId);
+      this._settingsId = null;
+    }
+    if (this._indicator?.coins?.length) {
       for (const c of this._indicator.coins) {
         c.destroy();
       }
     }
-    this._indicator.destroy();
+    this._indicator?.destroy();
     this._indicator = null;
     this._settings = null;
     CryptoUtil.destroy();

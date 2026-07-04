@@ -44,9 +44,9 @@ $ git clone https://github.com/alipirpiran/Crypto-Price-Tracker-for-Gnome-Shell.
 Create extension dir and Copy files in it:
 
 ``` shell
-$ mkdir -p ~/.local/share/gnome-shell/extensions/crypto@alipirpiran.github/ 
-
-$ cp -r ./Crypto-Price-Tracker-for-Gnome-Shell/* ~/.local/share/gnome-shell/extensions/crypto@alipirpiran.github/
+$ mkdir -p ~/.local/share/gnome-shell/extensions/crypto@abbasnaqdi.com/ 
+$ cd ~/Desktop
+$ cp -r ./Crypto-Price-Tracker-for-Gnome-Shell/* ~/.local/share/gnome-shell/extensions/crypto@abbasnaqdi.com/
 ```
 
 * Restart Gnome-shell. (ALT+F2, r, Enter)

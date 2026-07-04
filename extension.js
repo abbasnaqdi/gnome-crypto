@@ -139,6 +139,11 @@ export default class Extension extends Ex {
 
     this._settingsId = this._settings.connect('changed', (settings, key) => {
       if (key === 'panel-position' || key === 'panel-box-index') {
+        if (this._indicator?.coins?.length) {
+          for (const c of this._indicator.coins) {
+            c.destroy();
+          }
+        }
         this._indicator.destroy();
         this._indicator = new Indicator(this.metadata);
         this._indicator._buildCoinsSection();

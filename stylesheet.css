@@ -1,121 +1,95 @@
+/* GNOME Shell Minimalist & Theme-Compatible Stylesheet */
+
 .menu-item-text {
+  font-weight: bold;
 }
 
 .add-coin-btn {
-  min-width: 300px;
-  padding-right: 20px;
+  min-width: 250px;
 }
 
 .crypto-label {
-  min-width: 50px;
-  margin-left: 5px;
-  margin-right: 5px;
-  padding: 5px;
+  margin: 0 4px;
 }
 
+/* Inherit system styling, just make it compact */
 .crypto-input {
-  margin-left: 5px;
-  margin-right: 5px;
-  padding: 5px;
+  margin: 2px 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
 }
 
-.crypto-input.btn {
-  padding-left: 5px;
-  padding-right: 5px;
-  border-radius: 10px;
-  border-width: 1px;
-}
-
+/* Minimalist icon buttons with translucent overlay for theme compatibility */
 .btn {
-  padding-left: 5px;
-  padding-right: 5px;
-  border-radius: 10px;
-}
-.btn:hover {
-  background-color: #87cefa;
+  padding: 4px;
+  border-radius: 999px; /* Circular hover for standard icons */
+  transition-duration: 150ms;
 }
 
-.exchange-btn {
-  min-width: 110px;
-  border-color: #00bfff;
-  border-width: 1px;
-  margin-left: 5px;
-  margin-right: 5px;
-  border-radius: 10px;
-  margin-bottom: 10px;
+.btn:hover {
+  background-color: rgba(128, 128, 128, 0.15);
 }
+.btn:active {
+  background-color: rgba(128, 128, 128, 0.25);
+}
+
+/* Source/Exchange picker buttons - completely theme agnostic */
+.exchange-btn {
+  min-width: 100px;
+  margin: 2px 4px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  background-color: rgba(128, 128, 128, 0.05);
+  border: 1px solid rgba(128, 128, 128, 0.15);
+  transition-duration: 150ms;
+}
+
+.exchange-btn:hover {
+  background-color: rgba(128, 128, 128, 0.15);
+}
+
 .exchange-btn:checked {
-  background-color: #00bfff;
-  color: #fffaf0;
+  background-color: rgba(128, 128, 128, 0.35);
+  border-color: rgba(128, 128, 128, 0.3);
+  font-weight: bold;
 }
 
 .exchange-hbox {
-  padding: 3px;
-  margin-bottom: 5px;
+  padding: 2px;
+  margin-bottom: 2px;
 }
 
-.p0 {
-  padding: 0px;
-  border-spacing: 0px;
-}
-
-.m0 {
-  margin: 0px;
-}
-
-.coinItem {
-  /* padding-top: 3px; */
-  /* padding-bottom: 3px; */
-  padding-left: 0px;
-  /* padding-right: 0px; */
-  margin-left: 0px;
-  /* margin-right: 0px; */
-  margin-inline-start: 0px;
-  padding-block-start: 0px;
-  /* margin: 0; */
-  /* width: 100%; */
-}
+/* Utility classes for a compact UI */
+.p0 { padding: 0; }
+.m0 { margin: 0; }
+.coinItem { padding: 0; margin: 0; }
 
 .itemLabel {
+  font-family: monospace;
+  font-size: 1.05em;
   min-width: 60px;
+  margin: 0 4px;
 }
 
-.text-align-right {
-  text-align: right;
-}
+.text-align-right { text-align: right; }
 
-.color {
-  background-color: red;
-}
-
+/* Scale down icons for a compact aesthetic */
 .exchange-icon {
-  background-size: 15px;
-  height: 18px;
-  width: 18px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 16px;
+  width: 16px;
+  margin-right: 4px;
 }
 
-.exchange-icon.binance {
-  background-image: url('assets/icons/binance.ico');
-}
+.exchange-icon.binance { background-image: url('assets/icons/binance.ico'); }
+.exchange-icon.coingecko { background-image: url('assets/icons/coingecko.ico'); }
+.exchange-icon.crypto { background-image: url('assets/icons/crypto.png'); }
+.exchange-icon.okx { background-image: url('assets/icons/okx.png'); }
 
-.exchange-icon.coingecko {
-  background-image: url('assets/icons/coingecko.ico');
-}
-
-.exchange-icon.crypto {
-  background-image: url('assets/icons/crypto.png');
-}
-
-.exchange-icon.okx {
-  background-image: url('assets/icons/okx.png');
-}
-
-.w18 {
-  width: 18px;
-}
+.w18 { width: 16px; height: 16px; }
 
 .sources-scrollview {
-  margin-bottom: 10px;
-  margin-top: 10px;
-  padding-bottom: 5px;
+  margin: 4px 0;
 }

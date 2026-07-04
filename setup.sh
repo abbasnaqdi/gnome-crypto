@@ -1,6 +1,6 @@
 #!/bin/bash
 
-UUID="crypto@alipirpiran.github"
+UUID="crypto@abbasnaqdi.com"
 HOME_DIR="$HOME"
 
 if [ ! -z $1 ]; then

@@ -21,37 +21,47 @@ export default class CryptoTrackerPreferences extends ExtensionPreferences {
     page.add(group);
 
     // Update Interval
-    const updateIntervalRow = new Adw.SpinRow({
+    const updateIntervalRow = new Adw.ActionRow({
       title: 'Update Interval (Seconds)',
       subtitle: 'How often to refresh prices (1 to 3600 seconds)',
+    });
+    const updateIntervalSpin = new Gtk.SpinButton({
+      valign: Gtk.Align.CENTER,
       adjustment: new Gtk.Adjustment({
         lower: 1,
         upper: 3600,
         step_increment: 1,
       }),
     });
+    updateIntervalRow.add_suffix(updateIntervalSpin);
+    updateIntervalRow.activatable_widget = updateIntervalSpin;
     group.add(updateIntervalRow);
     settings.bind(
       'update-interval',
-      updateIntervalRow,
+      updateIntervalSpin,
       'value',
       Gio.SettingsBindFlags.DEFAULT
     );
 
     // Font Size
-    const fontSizeRow = new Adw.SpinRow({
+    const fontSizeRow = new Adw.ActionRow({
       title: 'Font Size',
       subtitle: 'Set to 0 to use GNOME default font size',
+    });
+    const fontSizeSpin = new Gtk.SpinButton({
+      valign: Gtk.Align.CENTER,
       adjustment: new Gtk.Adjustment({
         lower: 0,
         upper: 100,
         step_increment: 1,
       }),
     });
+    fontSizeRow.add_suffix(fontSizeSpin);
+    fontSizeRow.activatable_widget = fontSizeSpin;
     group.add(fontSizeRow);
     settings.bind(
       'font-size',
-      fontSizeRow,
+      fontSizeSpin,
       'value',
       Gio.SettingsBindFlags.DEFAULT
     );
@@ -73,19 +83,24 @@ export default class CryptoTrackerPreferences extends ExtensionPreferences {
     });
 
     // Panel Index
-    const indexRow = new Adw.SpinRow({
+    const indexRow = new Adw.ActionRow({
       title: 'Panel Position Index',
       subtitle: 'Order of the item within the selected side (0 is closest to edge)',
+    });
+    const indexSpin = new Gtk.SpinButton({
+      valign: Gtk.Align.CENTER,
       adjustment: new Gtk.Adjustment({
         lower: 0,
         upper: 100,
         step_increment: 1,
       }),
     });
+    indexRow.add_suffix(indexSpin);
+    indexRow.activatable_widget = indexSpin;
     group.add(indexRow);
     settings.bind(
       'panel-box-index',
-      indexRow,
+      indexSpin,
       'value',
       Gio.SettingsBindFlags.DEFAULT
     );

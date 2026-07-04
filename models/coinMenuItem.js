@@ -156,7 +156,7 @@ export let CoinMenuItem = GObject.registerClass(
       this._refreshPrice(menuItem);
 
       let interval = Settings.get_update_interval() || 10;
-      this.timeOutTag = GLib.timeout_add(1, 1000 * interval, async () => {
+      this.timeOutTag = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, interval, () => {
         this._refreshPrice(menuItem);
         return true;
       });

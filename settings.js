@@ -2,7 +2,7 @@ import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 
 
 function _getSettings() {
-  let extensionObject = Extension.lookupByUUID('crypto@alipirpiran.github');
+  let extensionObject = Extension.lookupByUUID('crypto@abbasnaqdi.com');
 
   return extensionObject.getSettings();
 }

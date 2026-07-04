@@ -101,6 +101,7 @@ const Indicator = GObject.registerClass(
 
       for (const c of this.coins) c.destroy();
       this.coins = [];
+      this.menuItem.text = '₿';
 
       for (const coin of _coins) {
         if (!coin.id) {

@@ -117,3 +117,42 @@ export let change_exchange = (ex) => {
   const settings = _getSettings();
   return settings.set_string('exchange', ex);
 };
+
+export let get_update_interval = () => {
+  const settings = _getSettings();
+  try {
+    return settings.get_int('update-interval');
+  } catch (e) {
+    return 10;
+  }
+};
+
+export let moveCoinUp = function (coin) {
+  const settings = _getSettings();
+  let coinJsonStr = String(settings.get_string('coins'));
+  let coinJson = JSON.parse(coinJsonStr);
+  let coins = coinJson.coins;
+
+  let index = coins.findIndex((value) => value.id === coin.id);
+  if (index > 0) {
+    let temp = coins[index - 1];
+    coins[index - 1] = coins[index];
+    coins[index] = temp;
+    settings.set_string('coins', JSON.stringify(coinJson));
+  }
+};
+
+export let moveCoinDown = function (coin) {
+  const settings = _getSettings();
+  let coinJsonStr = String(settings.get_string('coins'));
+  let coinJson = JSON.parse(coinJsonStr);
+  let coins = coinJson.coins;
+
+  let index = coins.findIndex((value) => value.id === coin.id);
+  if (index !== -1 && index < coins.length - 1) {
+    let temp = coins[index + 1];
+    coins[index + 1] = coins[index];
+    coins[index] = temp;
+    settings.set_string('coins', JSON.stringify(coinJson));
+  }
+};

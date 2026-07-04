@@ -21,14 +21,19 @@ function get_soup_v3(url) {
       GLib.PRIORITY_DEFAULT,
       null,
       function (session, result) {
-        if (message.get_status() === Soup.Status.OK) {
+        if (message.status_code === 200) {
           let bytes = session.send_and_read_finish(result);
           let decoder = new TextDecoder('utf-8');
           let response = decoder.decode(bytes.get_data());
 
           resolve({
-            code: result.status_code,
+            code: message.status_code,
             body: response,
+          });
+        } else {
+          resolve({
+            code: message.status_code,
+            body: null,
           });
         }
       }

@@ -28,6 +28,8 @@ export let CoinMenuItem = GObject.registerClass(
       this.exchange = coin.exchange;
       this.coins = coins;
       this.panelMenu = panelMenu;
+      this.current_price = '...';
+      this._isDestroyed = false;
 
       this.add_style_class_name('popup-submenu-menu-item');
       this._switch = new PopupMenu.Switch(this.activeCoin);
@@ -84,6 +86,28 @@ export let CoinMenuItem = GObject.registerClass(
       delBtn.connect('clicked', this._delCoin.bind(this, menuItem));
       this.add_child(delBtn);
 
+      let upIcon = new St.Icon({
+        icon_name: 'go-up-symbolic',
+        style_class: 'popup-menu-icon',
+      });
+      let upBtn = new St.Button({
+        child: upIcon,
+        style_class: 'btn m0',
+      });
+      upBtn.connect('clicked', this._moveUp.bind(this, menuItem));
+      this.add_child(upBtn);
+
+      let downIcon = new St.Icon({
+        icon_name: 'go-down-symbolic',
+        style_class: 'popup-menu-icon',
+      });
+      let downBtn = new St.Button({
+        child: downIcon,
+        style_class: 'btn m0',
+      });
+      downBtn.connect('clicked', this._moveDown.bind(this, menuItem));
+      this.add_child(downBtn);
+
       if (this.activeCoin) this._activeCoin(menuItem, true);
       this._startTimer(menuItem);
 
@@ -131,7 +155,8 @@ export let CoinMenuItem = GObject.registerClass(
     _startTimer(menuItem) {
       this._refreshPrice(menuItem);
 
-      this.timeOutTag = GLib.timeout_add(1, 1000 * 10, async () => {
+      let interval = Settings.get_update_interval() || 10;
+      this.timeOutTag = GLib.timeout_add(1, 1000 * interval, async () => {
         this._refreshPrice(menuItem);
         return true;
       });
@@ -139,24 +164,16 @@ export let CoinMenuItem = GObject.registerClass(
     async _refreshPrice(menuItem) {
       try {
         let price = await this._getPrice();
+        if (this._isDestroyed) return;
         if (!price) return; // if error happened, not change current price.
 
-        if (this.activeCoin) {
-          let re = new RegExp(
-            '(' +
-              `${this.title || this.symbol}` +
-              ') ((\\.\\.\\.)|(\\d*(,?\\d\\d\\d)*|\\d+)(\\.?\\d*))?',
-            'g',
-          );
-          let menuPairPrice = isNaN(+price.replaceAll(',', '')) ? '...' : price;
-
-          menuItem.text = menuItem.text.replace(
-            re,
-            `${this.title || this.symbol} ${menuPairPrice}`,
-          );
-        }
+        this.current_price = price;
         this.nameLbl.text = `${this.title || this.symbol}`;
         this.priceLbl.text = `${price}`;
+
+        if (this.activeCoin) {
+          this._updateMenuCoinItems(menuItem, false);
+        }
       } catch (error) {}
     }
     get state() {
@@ -209,7 +226,7 @@ export let CoinMenuItem = GObject.registerClass(
     _updateMenuCoinItems(menuItem, isInit) {
       let activeCoins = this.coins.filter(({ activeCoin }) => activeCoin);
       let newMenuItemText = activeCoins
-        .map(({ title, symbol }) => `${title || symbol} ...`)
+        .map((coin) => `${coin.title || coin.symbol} ${coin.current_price || '...'}`)
         .join(' | ');
 
       if (isInit)
@@ -217,20 +234,20 @@ export let CoinMenuItem = GObject.registerClass(
           (newMenuItemText ? ' | ' : '') + `${this.title || this.symbol} ...`;
 
       menuItem.text = newMenuItemText || '₿';
-
-      if (!isInit) activeCoins.forEach((coin) => coin._refreshPrice(menuItem));
     }
 
     _delCoin(menuItem) {
       Settings.delCoin({ id: this.id });
+      this.panelMenu._buildCoinsSection();
+    }
 
-      let index = this.coins.findIndex((coin) => {
-        return coin.id === this.id;
-      });
-      if (index !== -1) this.coins.splice(index, 1);
-      this._updateMenuCoinItems(menuItem, false);
+    _moveUp(menuItem) {
+      Settings.moveCoinUp({ id: this.id });
+      this.panelMenu._buildCoinsSection();
+    }
 
-      this.destroy();
+    _moveDown(menuItem) {
+      Settings.moveCoinDown({ id: this.id });
       this.panelMenu._buildCoinsSection();
     }
 
@@ -249,6 +266,7 @@ export let CoinMenuItem = GObject.registerClass(
     }
 
     destroy() {
+      this._isDestroyed = true;
       this.removeTimer();
       super.destroy();
     }

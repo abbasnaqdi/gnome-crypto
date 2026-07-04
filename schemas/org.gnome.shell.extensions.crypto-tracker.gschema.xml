@@ -13,5 +13,10 @@
         name='exchange'>
       <default>'Binance'</default>
     </key>
+    <key
+        type='i'
+        name='update-interval'>
+      <default>10</default>
+    </key>
   </schema>
 </schemalist>

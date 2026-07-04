@@ -1,9 +1,9 @@
 {
   "name": "Crypto Bar",
-  "description": "A powerful, minimalist GNOME Shell extension to track live cryptocurrency prices and 24h profit/loss.\n\nSources: Binance, Nobitex, OKX, Crypto.com, CoinGecko.\nFeatures: Static, Ticker, and Marquee panel modes.\n\nProject: https://github.com/abbasnaqdi/gnome-crypto\n(A heavily modernized fork of Crypto Price Tracker)",
+  "description": "A powerful, minimalist GNOME Shell extension to track live cryptocurrency prices and 24h profit/loss.\n\nSources: Binance, Nobitex, OKX, Crypto.com, CoinGecko.\nFeatures: Static, Ticker, and Marquee panel modes.\n\nProject: https://github.com/abbasnaqdi/crypto-bar\n(A heavily modernized fork of Crypto Price Tracker)",
   "uuid": "crypto@abbasnaqdi.com",
   "settings-schema": "org.gnome.shell.extensions.crypto-tracker",
-  "url": "https://github.com/abbasnaqdi/gnome-crypto",
+  "url": "https://github.com/abbasnaqdi/crypto-bar",
   "shell-version": ["45", "46", "47", "48", "49", "50"],
   "version": 51
 }

@@ -1,10 +1,10 @@
 # Crypto Price Tracker for Gnome-Shell
 
 <p align="center">
- <a href="https://github.com/abbasnaqdi/gnome-crypto/blob/main/LICENSE">
+ <a href="https://github.com/abbasnaqdi/crypto-bar/blob/main/LICENSE">
   <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg">
  </a>
- <a href="https://github.com/abbasnaqdi/gnome-crypto">
+ <a href="https://github.com/abbasnaqdi/crypto-bar">
   <img src="https://badges.frapsoft.com/os/v2/open-source.png?v=103">
  </a>
  </p>
@@ -29,8 +29,8 @@ A powerful, modern, and highly customized extension for Gnome-Shell to track pri
 
 1. Clone the repository anywhere on your system:
 ```bash
-git clone https://github.com/abbasnaqdi/gnome-crypto.git
-cd gnome-crypto
+git clone https://github.com/abbasnaqdi/crypto-bar.git
+cd crypto-bar
 ```
 
 2. Run the automated installation script:
@@ -65,4 +65,4 @@ Activate multiple coins from the menu by toggling the switch next to them. Depen
 To **Edit** an existing coin, simply click the pencil (Edit) icon next to it. Its details will automatically populate into the form section where you can adjust the symbol or title and save the changes instantly.
 
 ## License
-[MIT](https://github.com/abbasnaqdi/gnome-crypto/blob/main/LICENSE)
+[MIT](https://github.com/abbasnaqdi/crypto-bar/blob/main/LICENSE)

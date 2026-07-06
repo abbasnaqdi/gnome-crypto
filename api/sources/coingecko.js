@@ -11,7 +11,7 @@ export let CoingeckoClient = {
       const jsonRes = JSON.parse(res.body);
 
       if (Object.keys(jsonRes).length === 0) return { price: 'Not found', change: 0 };
-      if (Object.keys(jsonRes[name]).length === 0) return { price: 'Not found', change: 0 };
+      if (!jsonRes[name] || Object.keys(jsonRes[name]).length === 0) return { price: 'Not found', change: 0 };
 
       const price = +jsonRes[name][vol];
       const change = +jsonRes[name][`${vol}_24h_change`];

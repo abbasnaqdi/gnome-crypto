@@ -310,6 +310,9 @@ export let CoinMenuItem = GObject.registerClass(
       if (this.panelMenu && typeof this.panelMenu._updateTopPanelText === 'function') {
         this.panelMenu._updateTopPanelText();
       }
+      if (!isInit && this.panelMenu && typeof this.panelMenu._sortCoinsByChange === 'function') {
+        this.panelMenu._sortCoinsByChange();
+      }
     }
 
     _delCoin(menuItem) {

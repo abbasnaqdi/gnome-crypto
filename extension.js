@@ -192,6 +192,27 @@ const Indicator = GObject.registerClass(
       }
     }
 
+    _sortCoinsByChange() {
+      if (this.coins.length < 2) return;
+
+      const sorted = [...this.coins].sort((a, b) => {
+        const ca = typeof a.current_change === 'number' ? a.current_change : -Infinity;
+        const cb = typeof b.current_change === 'number' ? b.current_change : -Infinity;
+        return cb - ca;
+      });
+
+      let reordered = false;
+      for (let i = 0; i < sorted.length; i++) {
+        if (sorted[i] !== this.coins[i]) { reordered = true; break; }
+      }
+      if (!reordered) return;
+
+      this.coins = sorted;
+      for (const coin of sorted) this.coinsScrollViewVbox.remove_child(coin);
+      for (const coin of sorted) this.coinsScrollViewVbox.add_child(coin);
+      this._updateTopPanelText();
+    }
+
     destroy() {
       this._stopTicker();
       super.destroy();

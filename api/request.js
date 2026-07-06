@@ -26,7 +26,7 @@ function get_soup_v3(url) {
     let cancellable = new Gio.Cancellable();
     let resolved = false;
 
-    let timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 15, () => {
+    let timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 20, () => {
       if (resolved) return GLib.SOURCE_REMOVE;
       resolved = true;
       cancellable.cancel();
@@ -40,18 +40,19 @@ function get_soup_v3(url) {
       GLib.PRIORITY_DEFAULT,
       cancellable,
       function (session, result) {
-        if (resolved) return;
-        resolved = true;
-        if (timeoutId) {
-          GLib.source_remove(timeoutId);
-          timeoutId = 0;
-        }
-
         let bytes = null;
         try {
           bytes = session.send_and_read_finish(result);
         } catch (e) {
           // If network is unreachable or cancelled, finish() will throw an error.
+        }
+
+        if (resolved) return;
+        resolved = true;
+        
+        if (timeoutId) {
+          GLib.source_remove(timeoutId);
+          timeoutId = 0;
         }
 
         if (message.status_code === 200 && bytes) {
@@ -95,7 +96,7 @@ function get_soup_v2(url) {
     let message = Soup.Message.new('GET', url);
     let resolved = false;
 
-    let timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 15, () => {
+    let timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 20, () => {
       if (resolved) return GLib.SOURCE_REMOVE;
       resolved = true;
       _sessionV2.cancel_message(message, Soup.Status.CANCELLED);

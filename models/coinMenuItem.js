@@ -133,14 +133,16 @@ export let CoinMenuItem = GObject.registerClass(
       }
 
       this.connect('enter-event', () => {
-        if (this._isDestroyed) return;
+        if (this._isDestroyed) return Clutter.EVENT_PROPAGATE;
         viewIcon.icon_name = 'external-link-symbolic';
         viewIcon.style_class = `popup-menu-icon w18`;
+        return Clutter.EVENT_PROPAGATE;
       });
       this.connect('leave-event', () => {
-        if (this._isDestroyed) return;
+        if (this._isDestroyed) return Clutter.EVENT_PROPAGATE;
         viewIcon.icon_name = '';
         viewIcon.style_class = `popup-menu-icon exchange-icon ${this.exchange.toLowerCase()}`;
+        return Clutter.EVENT_PROPAGATE;
       });
     }
     _activeCoin(menuItem, isInit) {
@@ -189,13 +191,13 @@ export let CoinMenuItem = GObject.registerClass(
       if (isImmediate) {
         this.timeOutTag = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 0, () => {
           this.timeOutTag = 0;
-          this._doFetchAndReschedule(menuItem);
+          this._doFetchAndReschedule(menuItem).catch(console.error);
           return GLib.SOURCE_REMOVE;
         });
       } else {
         this.timeOutTag = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, this._currentRetryInterval, () => {
           this.timeOutTag = 0;
-          this._doFetchAndReschedule(menuItem);
+          this._doFetchAndReschedule(menuItem).catch(console.error);
           return GLib.SOURCE_REMOVE;
         });
       }
@@ -238,7 +240,7 @@ export let CoinMenuItem = GObject.registerClass(
         this.nameLbl.text = `${this.title || this.symbol}`;
         this.priceLbl.text = `${result.price}`;
 
-        if (!isError && result.change !== undefined && result.change !== 0) {
+        if (!isError && typeof result.change === 'number') {
            let sign = result.change > 0 ? '+' : '';
            let colorClass = result.change > 0 ? 'crypto-up' : 'crypto-down';
            this.changeLbl.text = `${sign}${result.change.toFixed(2)}%`;

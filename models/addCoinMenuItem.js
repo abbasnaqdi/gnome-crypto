@@ -62,7 +62,7 @@ export let AddCoinMenuItem = GObject.registerClass(
       });
       addBtn.connect(
         'clicked',
-        this._addCoin.bind(this)
+        () => this._addCoin().catch(console.error)
       );
       hbox.add_child(addBtn);
     }

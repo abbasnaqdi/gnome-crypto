@@ -173,7 +173,8 @@ const Indicator = GObject.registerClass(
           let sign = coin.current_change > 0 ? '+' : '';
           changeStr = ` (<span foreground="${color}">${sign}${coin.current_change.toFixed(1)}%</span>)`;
         }
-        this.menuItem.clutter_text.set_markup(`${coin.title || coin.symbol} ${coin.current_price || '...'}${changeStr}`);
+        let safeTitle = GLib.markup_escape_text(coin.title || coin.symbol, -1);
+        this.menuItem.clutter_text.set_markup(`${safeTitle} ${coin.current_price || '...'}${changeStr}`);
       } else {
         let markupText = activeCoins
           .map((coin) => {
@@ -183,7 +184,8 @@ const Indicator = GObject.registerClass(
                let sign = coin.current_change > 0 ? '+' : '';
                changeStr = ` (<span foreground="${color}">${sign}${coin.current_change.toFixed(1)}%</span>)`;
              }
-             return `${coin.title || coin.symbol} ${coin.current_price || '...'}${changeStr}`;
+             let safeTitle = GLib.markup_escape_text(coin.title || coin.symbol, -1);
+             return `${safeTitle} ${coin.current_price || '...'}${changeStr}`;
           })
           .join(' | ');
         this.menuItem.clutter_text.set_markup(markupText);
@@ -236,6 +238,9 @@ export default class Extension extends Ex {
       }
       if (key === 'update-interval') {
         this._indicator._buildCoinsSection();
+      }
+      if (key === 'panel-display-mode' || key === 'ticker-interval') {
+        this._indicator._startTicker();
       }
     });
   }

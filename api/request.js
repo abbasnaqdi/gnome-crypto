@@ -24,10 +24,14 @@ function get_soup_v3(url) {
 
     let message = Soup.Message.new('GET', url);
     let cancellable = new Gio.Cancellable();
+    let resolved = false;
 
     let timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 5, () => {
+      if (resolved) return GLib.SOURCE_REMOVE;
+      resolved = true;
       cancellable.cancel();
       timeoutId = 0;
+      resolve({ code: 0, body: null });
       return GLib.SOURCE_REMOVE;
     });
 
@@ -36,6 +40,8 @@ function get_soup_v3(url) {
       GLib.PRIORITY_DEFAULT,
       cancellable,
       function (session, result) {
+        if (resolved) return;
+        resolved = true;
         if (timeoutId) {
           GLib.source_remove(timeoutId);
           timeoutId = 0;
@@ -87,8 +93,24 @@ function get_soup_v2(url) {
     }
 
     let message = Soup.Message.new('GET', url);
+    let resolved = false;
+
+    let timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 5, () => {
+      if (resolved) return GLib.SOURCE_REMOVE;
+      resolved = true;
+      _sessionV2.cancel_message(message, Soup.Status.CANCELLED);
+      timeoutId = 0;
+      resolve({ code: 0, body: null });
+      return GLib.SOURCE_REMOVE;
+    });
 
     _sessionV2.queue_message(message, function (_httpSession, result) {
+      if (resolved) return;
+      resolved = true;
+      if (timeoutId) {
+        GLib.source_remove(timeoutId);
+        timeoutId = 0;
+      }
       resolve({
         code: result.status_code,
         body: message.response_body.data,

@@ -9,6 +9,7 @@ import * as Settings from '../settings.js';
 
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import * as Util from 'resource:///org/gnome/shell/misc/util.js';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
 export let CoinMenuItem = GObject.registerClass(
   class CoinMenuItem extends PopupMenu.PopupBaseMenuItem {
@@ -302,7 +303,7 @@ export let CoinMenuItem = GObject.registerClass(
         );
         Util.spawnCommandLine(`xdg-open ${chartUrl}`);
       } catch (err) {
-        let title = _('Can not open %s').format(chartUrl);
+        let title = `Can not open ${chartUrl}`;
         Main.notifyError(title, err);
       }
     }

@@ -18,9 +18,9 @@ export let CryptoClient = {
   },
 
   _getChartUrl(symbol) {
-    exchangeUrl = 'https://crypto.com/exchange/trade';
-    formattedPair = symbol.replace('/', '_').toUpperCase();
+    let exchangeUrl = 'https://crypto.com/exchange/trade';
+    let formattedPair = symbol.replace('/', '_').toUpperCase();
 
-    return _('%s/%s').format(exchangeUrl, formattedPair);
+    return `${exchangeUrl}/${formattedPair}`;
   }
 }

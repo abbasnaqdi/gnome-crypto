@@ -20,7 +20,7 @@ export let AddCoinSourceBoxLayout = GObject.registerClass(
       this.add_child(hbox);
 
       this.sourceLbl = new St.Label({
-        text: ('%s %s').format('Source: ', this.addCoinMenuItem.current_exchange),
+        text: `Source: ${this.addCoinMenuItem.current_exchange}`,
         y_align: Clutter.ActorAlign.CENTER,
         style_class: 'crypto-label',
       });
@@ -87,7 +87,7 @@ export let AddCoinSourceBoxLayout = GObject.registerClass(
             self.checked = false;
           });
           self.checked = true;
-          this.sourceLbl.text = ('%s %s').format('Source: ', this.addCoinMenuItem.current_exchange);
+          this.sourceLbl.text = `Source: ${this.addCoinMenuItem.current_exchange}`;
         });
 
         btns.push(btn);

@@ -21,6 +21,6 @@ export let BinanceClient = {
     let exchangeUrl = 'https://www.binance.com/en/trade';
     let formattedPair = symbol.replace('/', '_').toUpperCase();
 
-    return _('%s/%s').format(exchangeUrl, formattedPair);
+    return `${exchangeUrl}/${formattedPair}`;
   }
 }

@@ -23,12 +23,12 @@ export default class CryptoTrackerPreferences extends ExtensionPreferences {
     // Update Interval
     const updateIntervalRow = new Adw.ActionRow({
       title: 'Update Interval (Seconds)',
-      subtitle: 'How frequently prices are fetched from the exchange. Lower values give more real-time data but use more network. Default: 10s',
+      subtitle: 'How frequently prices are fetched from the exchange. Minimum 10s to avoid being rate-limited or blocked by providers. Default: 10s',
     });
     const updateIntervalSpin = new Gtk.SpinButton({
       valign: Gtk.Align.CENTER,
       adjustment: new Gtk.Adjustment({
-        lower: 1,
+        lower: 10,
         upper: 3600,
         step_increment: 1,
       }),

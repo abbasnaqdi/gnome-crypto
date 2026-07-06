@@ -210,7 +210,7 @@ export let CoinMenuItem = GObject.registerClass(
       if (this._isDestroyed) return;
 
       let userInterval = Settings.get_update_interval() || 5;
-      if (userInterval < 5) userInterval = 5; // optimal minimum
+      if (userInterval < 10) userInterval = 10; // floor to avoid rate-limiting
 
       if (success) {
         this._currentRetryInterval = userInterval;

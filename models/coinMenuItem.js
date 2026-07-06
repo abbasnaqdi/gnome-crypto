@@ -230,7 +230,7 @@ export let CoinMenuItem = GObject.registerClass(
         if (this._isDestroyed) return false;
         if (!result || !result.price) return false;
 
-        let isError = (result.price === '...');
+        let isError = (result.price === '...' || result.price === 'Error');
 
         this.current_price = result.price;
         this.current_change = result.change;

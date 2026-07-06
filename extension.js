@@ -169,7 +169,7 @@ const Indicator = GObject.registerClass(
         let coin = activeCoins[this.tickerIndex];
         let changeStr = '';
         if (coin.current_change) {
-          let color = coin.current_change > 0 ? '#2ec27e' : (coin.current_change < 0 ? '#e01b24' : '');
+          let color = coin.current_change > 0 ? '#2ec27e' : (coin.current_change < 0 ? '#e01b24' : 'inherit');
           let sign = coin.current_change > 0 ? '+' : '';
           changeStr = ` (<span foreground="${color}">${sign}${coin.current_change.toFixed(1)}%</span>)`;
         }
@@ -180,7 +180,7 @@ const Indicator = GObject.registerClass(
           .map((coin) => {
              let changeStr = '';
              if (coin.current_change) {
-               let color = coin.current_change > 0 ? '#2ec27e' : (coin.current_change < 0 ? '#e01b24' : '');
+               let color = coin.current_change > 0 ? '#2ec27e' : (coin.current_change < 0 ? '#e01b24' : 'inherit');
                let sign = coin.current_change > 0 ? '+' : '';
                changeStr = ` (<span foreground="${color}">${sign}${coin.current_change.toFixed(1)}%</span>)`;
              }

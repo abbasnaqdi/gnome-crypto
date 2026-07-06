@@ -213,11 +213,12 @@ export let CoinMenuItem = GObject.registerClass(
       if (success) {
         this._currentRetryInterval = userInterval;
       } else {
-        if (this._currentRetryInterval < userInterval) {
-           this._currentRetryInterval = Math.min(this._currentRetryInterval * 2, userInterval);
+        let maxBackoff = 60; // Cap error retries to 60 seconds max
+        if (this._currentRetryInterval < maxBackoff) {
+           this._currentRetryInterval = Math.min(this._currentRetryInterval * 2, maxBackoff);
            if (this._currentRetryInterval < 5) this._currentRetryInterval = 5;
         } else {
-           this._currentRetryInterval = userInterval;
+           this._currentRetryInterval = maxBackoff;
         }
       }
 
@@ -243,7 +244,7 @@ export let CoinMenuItem = GObject.registerClass(
            this.changeLbl.text = `${sign}${result.change.toFixed(2)}%`;
            this.changeLbl.style_class = `itemLabel text-align-right crypto-change ${colorClass}`;
         } else {
-           this.changeLbl.text = '';
+           this.changeLbl.text = '...';
            this.changeLbl.style_class = 'itemLabel text-align-right crypto-change';
         }
 

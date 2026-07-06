@@ -23,7 +23,7 @@ export default class CryptoTrackerPreferences extends ExtensionPreferences {
     // Update Interval
     const updateIntervalRow = new Adw.ActionRow({
       title: 'Update Interval (Seconds)',
-      subtitle: 'How often to refresh prices (1 to 3600 seconds)',
+      subtitle: 'How frequently prices are fetched from the exchange. Lower values give more real-time data but use more network. Default: 10s',
     });
     const updateIntervalSpin = new Gtk.SpinButton({
       valign: Gtk.Align.CENTER,
@@ -46,7 +46,7 @@ export default class CryptoTrackerPreferences extends ExtensionPreferences {
     // Font Size
     const fontSizeRow = new Adw.ActionRow({
       title: 'Font Size',
-      subtitle: 'Set to 0 to use GNOME default font size',
+      subtitle: 'Size of the price text shown in the top bar (in pixels). Set to 0 to inherit the GNOME system font size.',
     });
     const fontSizeSpin = new Gtk.SpinButton({
       valign: Gtk.Align.CENTER,
@@ -69,7 +69,7 @@ export default class CryptoTrackerPreferences extends ExtensionPreferences {
     // Panel Position
     const positionRow = new Adw.ComboRow({
       title: 'Panel Position',
-      subtitle: 'Which side of the top bar to place the indicator',
+      subtitle: 'Which section of the top bar the indicator appears in: Left (near Activities), Center, or Right (near the clock/tray).',
       model: Gtk.StringList.new(['Left', 'Center', 'Right']),
     });
     group.add(positionRow);
@@ -85,7 +85,7 @@ export default class CryptoTrackerPreferences extends ExtensionPreferences {
     // Panel Index
     const indexRow = new Adw.ActionRow({
       title: 'Panel Position Index',
-      subtitle: 'Order of the item within the selected side (0 is closest to edge)',
+      subtitle: 'Controls the order among other items in the same panel section. 0 places it closest to the edge; higher numbers move it inward.',
     });
     const indexSpin = new Gtk.SpinButton({
       valign: Gtk.Align.CENTER,
@@ -108,7 +108,7 @@ export default class CryptoTrackerPreferences extends ExtensionPreferences {
     // Panel Display Mode
     const displayModeRow = new Adw.ComboRow({
       title: 'Top Panel Display Mode',
-      subtitle: 'Static shows all coins, Ticker rotates through them',
+      subtitle: 'Static: all active coins are shown at once, separated by "|". Ticker: one coin is shown at a time and rotates automatically.',
       model: Gtk.StringList.new(['Static', 'Ticker']),
     });
     group.add(displayModeRow);
@@ -124,7 +124,7 @@ export default class CryptoTrackerPreferences extends ExtensionPreferences {
     // Ticker Interval
     const tickerIntervalRow = new Adw.ActionRow({
       title: 'Ticker Rotation Speed (Seconds)',
-      subtitle: 'How long to show each coin before rotating',
+      subtitle: 'Only used when Display Mode is set to Ticker. Determines how many seconds each coin is shown before switching to the next one.',
     });
     const tickerIntervalSpin = new Gtk.SpinButton({
       valign: Gtk.Align.CENTER,

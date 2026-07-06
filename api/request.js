@@ -28,9 +28,15 @@ function get_soup_v3(url) {
       GLib.PRIORITY_DEFAULT,
       null,
       function (session, result) {
-        if (message.status_code === 200) {
+        let bytes = null;
+        try {
+          bytes = session.send_and_read_finish(result);
+        } catch (e) {
+          // If network is unreachable, finish() will throw an error.
+        }
+
+        if (message.status_code === 200 && bytes) {
           try {
-            let bytes = session.send_and_read_finish(result);
             let decoder = new TextDecoder('utf-8');
             let response = decoder.decode(bytes.get_data());
 

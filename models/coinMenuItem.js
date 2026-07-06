@@ -127,8 +127,9 @@ export let CoinMenuItem = GObject.registerClass(
       downBtn.connect('clicked', this._moveDown.bind(this, menuItem));
       this.add_child(downBtn);
 
-      if (this.activeCoin) this._activeCoin(menuItem, true);
-      this._startTimer(menuItem);
+      if (this.activeCoin) {
+        this._activeCoin(menuItem, true);
+      }
 
       this.connect('enter-event', () => {
         if (this._isDestroyed) return;
@@ -147,11 +148,12 @@ export let CoinMenuItem = GObject.registerClass(
       if (!isInit) Settings.updateCoin(this._getJSON());
 
       this._updateMenuCoinItems(menuItem, isInit);
-      this._refreshPrice(menuItem);
+      this._startTimer(menuItem);
     }
     _disableCoin(menuItem) {
       this.activeCoin = false;
       Settings.updateCoin(this._getJSON());
+      this.removeTimer();
 
       this._updateMenuCoinItems(menuItem);
     }

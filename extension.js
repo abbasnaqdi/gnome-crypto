@@ -82,7 +82,10 @@ const Indicator = GObject.registerClass(
       this.addCoinSubMenu = new AddCoinMenuItem(this, Me);
       this.menu.addMenuItem(this.addCoinSubMenu);
 
-      this.menu.connect('open-state-changed', (menu, open) => {
+      if (this._openStateHandlerId) {
+        this.menu.disconnect(this._openStateHandlerId);
+      }
+      this._openStateHandlerId = this.menu.connect('open-state-changed', (menu, open) => {
         if (!open && this.addCoinSubMenu) {
           this.addCoinSubMenu.editing_id = null;
           this.addCoinSubMenu.editing_active = false;
@@ -110,6 +113,7 @@ const Indicator = GObject.registerClass(
 
       for (const c of this.coins) c.destroy();
       this.coins = [];
+      this._invalidateActiveCoinsCache();
       this.menuItem.text = '₿';
 
       for (const coin of _coins) {
@@ -148,16 +152,43 @@ const Indicator = GObject.registerClass(
       }
     }
 
+    _restartAllCoinTimers() {
+      for (const coin of this.coins) {
+        if (coin.activeCoin) {
+          coin.removeTimer();
+          coin._scheduleNextFetch(null, false);
+        }
+      }
+    }
+
     _advanceTicker() {
-      let activeCoins = this.coins.filter(({ activeCoin }) => activeCoin);
+      const activeCoins = this._getActiveCoins();
       if (activeCoins.length > 0) {
         this.tickerIndex = (this.tickerIndex + 1) % activeCoins.length;
       }
       this._updateTopPanelText();
     }
 
+    _getActiveCoins() {
+      if (!this._activeCoinsCache) {
+        this._activeCoinsCache = this.coins.filter(({ activeCoin }) => activeCoin);
+      }
+      return this._activeCoinsCache;
+    }
+
+    _invalidateActiveCoinsCache() {
+      this._activeCoinsCache = null;
+    }
+
+    _formatCoinChange(change) {
+      if (typeof change !== 'number') return '';
+      const color = change > 0 ? '#2ec27e' : (change < 0 ? '#e01b24' : 'inherit');
+      const sign = change > 0 ? '+' : '';
+      return ` (<span foreground="${color}">${sign}${change.toFixed(1)}%</span>)`;
+    }
+
     _updateTopPanelText() {
-      let activeCoins = this.coins.filter(({ activeCoin }) => activeCoin);
+      const activeCoins = this._getActiveCoins();
       if (activeCoins.length === 0) {
         this.menuItem.text = '₿';
         return;
@@ -168,23 +199,13 @@ const Indicator = GObject.registerClass(
       if (displayMode === 'ticker') {
         this.tickerIndex = (this.tickerIndex || 0) % activeCoins.length;
         let coin = activeCoins[this.tickerIndex];
-        let changeStr = '';
-        if (coin.current_change) {
-          let color = coin.current_change > 0 ? '#2ec27e' : (coin.current_change < 0 ? '#e01b24' : 'inherit');
-          let sign = coin.current_change > 0 ? '+' : '';
-          changeStr = ` (<span foreground="${color}">${sign}${coin.current_change.toFixed(1)}%</span>)`;
-        }
+        let changeStr = this._formatCoinChange(coin.current_change);
         let safeTitle = GLib.markup_escape_text(coin.title || coin.symbol, -1);
         this.menuItem.clutter_text.set_markup(`${safeTitle} ${coin.current_price || '...'}${changeStr}`);
       } else {
         let markupText = activeCoins
           .map((coin) => {
-             let changeStr = '';
-             if (coin.current_change) {
-               let color = coin.current_change > 0 ? '#2ec27e' : (coin.current_change < 0 ? '#e01b24' : 'inherit');
-               let sign = coin.current_change > 0 ? '+' : '';
-               changeStr = ` (<span foreground="${color}">${sign}${coin.current_change.toFixed(1)}%</span>)`;
-             }
+             let changeStr = this._formatCoinChange(coin.current_change);
              let safeTitle = GLib.markup_escape_text(coin.title || coin.symbol, -1);
              return `${safeTitle} ${coin.current_price || '...'}${changeStr}`;
           })
@@ -194,6 +215,18 @@ const Indicator = GObject.registerClass(
     }
 
     _sortCoinsByChange() {
+      if (this.coins.length < 2) return;
+
+      if (this._sortPending) return;
+      this._sortPending = true;
+      GLib.idle_add(GLib.PRIORITY_DEFAULT, () => {
+        this._sortPending = false;
+        this._doSortCoinsByChange();
+        return GLib.SOURCE_REMOVE;
+      });
+    }
+
+    _doSortCoinsByChange() {
       if (this.coins.length < 2) return;
 
       const sorted = [...this.coins].sort((a, b) => {
@@ -209,6 +242,7 @@ const Indicator = GObject.registerClass(
       if (!reordered) return;
 
       this.coins = sorted;
+      this._invalidateActiveCoinsCache();
       for (let i = 0; i < sorted.length; i++) {
         this.coinsScrollViewVbox.set_child_at_index(sorted[i], i);
       }
@@ -216,6 +250,10 @@ const Indicator = GObject.registerClass(
 
     destroy() {
       this._stopTicker();
+      if (this._openStateHandlerId) {
+        this.menu.disconnect(this._openStateHandlerId);
+        this._openStateHandlerId = null;
+      }
       super.destroy();
     }
   },
@@ -259,7 +297,7 @@ export default class Extension extends Ex {
         this._applyFontSize();
       }
       if (key === 'update-interval') {
-        this._indicator._buildCoinsSection();
+        this._indicator._restartAllCoinTimers();
       }
       if (key === 'panel-display-mode' || key === 'ticker-interval') {
         this._indicator._startTicker();

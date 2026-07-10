@@ -20,10 +20,6 @@ export let NobitexClient = {
       const key = `${name}-${mappedVol}`.toLowerCase();
       let stats = jsonRes.stats[key];
       
-      if (!stats) {
-          return { price: 'Error', change: 0 };
-      }
-
       if (!stats) return { price: 'Error', change: 0 };
 
       let price = +(stats.latest || 0);
